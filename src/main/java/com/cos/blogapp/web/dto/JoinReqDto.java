@@ -13,7 +13,7 @@ public class JoinReqDto {
 	private String username;
 	private String password;
 	private String email;
-	
+
 	public User toEntity() {
 		User user = new User();
 		user.setUsername(username);

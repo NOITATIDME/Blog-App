@@ -10,16 +10,19 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import com.cos.blogapp.domain.user.User;
 import com.cos.blogapp.domain.user.UserRepository;
+import com.cos.blogapp.web.dto.JoinReqDto;
 import com.cos.blogapp.web.dto.LoginReqDto;
 
 @Controller
 public class UserController {
 
 	private UserRepository userRepository;
+	private HttpSession session;
 
 	// DI
-	public UserController(UserRepository userRepository) {
+	public UserController(UserRepository userRepository, HttpSession session) {
 		this.userRepository = userRepository;
+		this.session = session;
 	}
 
 	@GetMapping("/test/query/join")
@@ -64,10 +67,21 @@ public class UserController {
 		System.out.println(dto.getUsername());
 		System.out.println(dto.getPassword());
 		// 2. DB -> 조회
-		// 3. 있으면
-		// 4. session에 저장
-		// 5. 메인페이지를 돌려주기
-		return "home";
+		User userEntity =  userRepository.mLogin(dto.getUsername(), dto.getPassword());
+
+		if(userEntity == null) {
+			return "redirect:/loginForm";
+		}else {
+
+			session.setAttribute("principal", userEntity);
+			return "redirect:/home";
+		}
 	}
+	@PostMapping("/join")
+	public String join(JoinReqDto dto) { // username=love&password=1234&email=love@nate.com
+		userRepository.save(dto.toEntity());
+		return "redirect:/loginForm"; // 리다이렉션 (300)
+	}
+
 
 }

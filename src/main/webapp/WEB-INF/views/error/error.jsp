@@ -8,6 +8,6 @@
 </head>
 <body>
 <h1>에러 터졌어요!!!</h1>
-
+${errorMap}
 </body>
 </html> 

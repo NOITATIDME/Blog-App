@@ -2,7 +2,7 @@
     pageEncoding="UTF-8"%>
     
 <br/>
-<div class="jumbotron text-center" style="margin-bottom:0"id="footer">
+<div class="jumbotron text-center" style="margin-bottom:0">
   <p>🎃🎃🎃상맹의명상🎃🎃🎃</p>
   <p>📞📞📞 010-XXX-7777 📞📞📞</p>
   <p>🌴🌴🌴 부산광역시 XXX XXX 🌴🌴🌴</p>

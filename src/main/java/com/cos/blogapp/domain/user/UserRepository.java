@@ -10,10 +10,10 @@ import org.springframework.data.jpa.repository.Query;
 //deleteById(1) 한건 삭제
 //@Repository
 public interface UserRepository extends JpaRepository<User, Integer>{
-	@Query(value = "insert into user (username, password, email) values(:username, :password, :email)", nativeQuery = true)
+	@Query(value = "insert into User (username, password, email) values(:username, :password, :email)", nativeQuery = true)
 	void join(String username, String password, String email);
 
-	@Query(value = "select * from user where username = :username and password = :password", nativeQuery = true)
+	@Query(value = "select * from User where username = :username and password = :password", nativeQuery = true)
 	User mLogin(String username, String password);
 }
 

@@ -42,30 +42,30 @@ public class UserController {
 	}
 
 	@PostMapping("/login")
-	public String login(@Valid LoginReqDto dto, BindingResult bindingResult) {
+	public @ResponseBody String login(@Valid LoginReqDto dto, BindingResult bindingResult) {
 
-		if(bindingResult.hasErrors()) {
+		if (bindingResult.hasErrors()) {
 			Map<String, String> errorMap = new HashMap<>();
-			for(FieldError error : bindingResult.getFieldErrors()) {
+			for (FieldError error : bindingResult.getFieldErrors()) {
 				errorMap.put(error.getField(), error.getDefaultMessage());
 			}
 			return Script.back(errorMap.toString());
 		}
-		
-		User userEntity =  
-				userRepository.mLogin(
-						dto.getUsername(), SHA.encrypt(dto.getPassword(), MyAlgorithm.SHA256));
 
-		if(userEntity == null) {
-			return Script.back("아이디 혹은 비밀번호를 잘못입력하였습니다.");
-		}else {
+		User userEntity =  userRepository.mLogin(
+				dto.getUsername(), SHA.encrypt(dto.getPassword(), MyAlgorithm.SHA256));
+		
+		if (userEntity == null) { // username, password 잘못 기입
+			return Script.back("아이디 혹은 비밀번호를 잘못 입력하였습니다.");
+		} else {
 			// 세션 날라가는 조건
 			// 1. session.invalidate() : 세션이 들고있는 정보가 날라간다.
 			// 2. 브라우저를 닫으면 날라간다.
 			session.setAttribute("principal", userEntity);
-			return Script.href("/","로그인 성공");
+			return Script.href("/", "로그인 성공");
 		}
 	}
+
 	
 	@PostMapping("/join")
 	public @ResponseBody String join(@Valid JoinReqDto dto, BindingResult bindingResult,Model model) { // username=love&password=1234&email=love@nate.com

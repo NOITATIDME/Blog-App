@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.cos.blogapp.domain.user.User;
 import com.cos.blogapp.domain.user.UserRepository;
+import com.cos.blogapp.util.MyAlgorithm;
+import com.cos.blogapp.util.SHA;
 import com.cos.blogapp.util.Script;
 import com.cos.blogapp.web.dto.JoinReqDto;
 import com.cos.blogapp.web.dto.LoginReqDto;
@@ -40,29 +42,28 @@ public class UserController {
 	}
 
 	@PostMapping("/login")
-	public String login(@Valid LoginReqDto dto, BindingResult bindingResult,Model model) {
+	public String login(@Valid LoginReqDto dto, BindingResult bindingResult) {
 
 		if(bindingResult.hasErrors()) {
 			Map<String, String> errorMap = new HashMap<>();
 			for(FieldError error : bindingResult.getFieldErrors()) {
-				errorMap.put(error.getField() , error.getDefaultMessage() );
+				errorMap.put(error.getField(), error.getDefaultMessage());
 			}
-			return "error/error";
+			return Script.back(errorMap.toString());
 		}
 		
-		// 1. username, password 받기
-		System.out.println(dto.getUsername());
-		System.out.println(dto.getPassword());
-		
-		// 2. DB -> 조회
-		User userEntity =  userRepository.mLogin(dto.getUsername(), dto.getPassword());
+		User userEntity =  
+				userRepository.mLogin(
+						dto.getUsername(), SHA.encrypt(dto.getPassword(), MyAlgorithm.SHA256));
 
 		if(userEntity == null) {
-			return "redirect:/loginForm";
+			return Script.back("아이디 혹은 비밀번호를 잘못입력하였습니다.");
 		}else {
-
+			// 세션 날라가는 조건
+			// 1. session.invalidate() : 세션이 들고있는 정보가 날라간다.
+			// 2. 브라우저를 닫으면 날라간다.
 			session.setAttribute("principal", userEntity);
-			return "redirect:/";
+			return Script.href("/","로그인 성공");
 		}
 	}
 	
@@ -82,6 +83,9 @@ public class UserController {
 			return Script.back(errorMap.toString());
 		}
 		
+		String encPassword = SHA.encrypt(dto.getPassword(), MyAlgorithm.SHA256);
+		
+		dto.setPassword(encPassword);
 		userRepository.save(dto.toEntity());
 		return Script.href("/loginForm"); // 리다이렉션 (300)
 	}

@@ -49,7 +49,9 @@ public class BoardController {
 			return Script.back(errorMap.toString());
 		}
 		
-		
+//		p 태그 제거
+		dto.setContent(dto.getContent().replaceAll("<p>", ""));
+		dto.setContent(dto.getContent().replaceAll("</p>", ""));
 //		User user = new User();
 //		user.setId(3);
 //		boardRepository.save(dto.toEntity(principal));

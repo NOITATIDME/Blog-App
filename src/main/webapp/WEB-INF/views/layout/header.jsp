@@ -17,6 +17,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@300&family=Jua&display=swap" rel="stylesheet">
+<!-- summernote -->
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
   <style>
   #footer {
 	position:fixed;
@@ -48,12 +51,12 @@
 					</li>
 				</c:when>
 				<c:otherwise>
-					<li class="nav-item"><a class="nav-link" href="/board/saveForm">글쓰기</a>
+					<li class="nav-item"><a class="nav-link"href="/board/saveForm">글쓰기</a>
 					</li>
 
 					<li class="nav-item"><a class="nav-link" href="/user/${sessionScope.principal.id}">회원정보</a>
 					</li>
-
+							
 					<li class="nav-item"><a class="nav-link" href="/logout">로그아웃</a>
 					</li>
 				</c:otherwise>

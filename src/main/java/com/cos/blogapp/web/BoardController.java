@@ -14,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -31,6 +32,17 @@ public class BoardController {
 
 	private final BoardRepository boardRepository;
 	private final HttpSession session;
+	
+	// 쿼리스트링, 패스var -> DB where에 걸리는 친구들
+	// 1.컨트롤러 설정 2. HTTP Method 선정 3. 받을 데이터가 있는지! (body, 쿼리스트링, 패스var)
+	// 4. DB에 접근을 해야하면 Model 접근하기 or Else Model에 접근할 필요가 없다.
+	@GetMapping("/board/{id}")
+	public String detail(@PathVariable int id, Model model) {
+		// select * from board where id = :id
+		Board boardEntity = boardRepository.findById(id).get();
+		model.addAttribute("boardEntity", boardEntity);
+		return "board/detail";
+	}
 	
 	@PostMapping("/board")
 	public @ResponseBody String save(@Valid BoardSaveReqDto dto, BindingResult bindingResult) {

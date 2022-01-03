@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.cos.blogapp.domain.board.Board;
 import com.cos.blogapp.domain.board.BoardRepository;
 import com.cos.blogapp.domain.user.User;
+import com.cos.blogapp.handler.ex.MyNotFoundException;
 import com.cos.blogapp.util.Script;
 import com.cos.blogapp.web.dto.BoardSaveReqDto;
 
@@ -45,7 +46,7 @@ public class BoardController {
 		
 		// 2. orElseThrow
 		Board boardEntity = boardRepository.findById(id)
-				.orElseThrow();
+				.orElseThrow(()-> new MyNotFoundException(id +" 번의 게시물을 못찾았어요"));
 				
 		model.addAttribute("boardEntity", boardEntity);
 		return "board/detail";
@@ -55,7 +56,7 @@ public class BoardController {
 	public @ResponseBody String save(@Valid BoardSaveReqDto dto, BindingResult bindingResult) {
 		User principal = (User) session.getAttribute("principal");
 
-		// 인증 체크 후 로그인 창으로 이동
+		// 인증, 권한 체크(공통 로직) 후 로그인 창으로 이동
 		if(principal == null) { // 로그인 안됨
 			return Script.href("/loginForm","잘못된 접근입니다.");
 		}

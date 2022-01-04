@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -33,6 +34,14 @@ public class BoardController {
 
 	private final BoardRepository boardRepository;
 	private final HttpSession session;
+	
+	@DeleteMapping("/board/{id}")
+	public @ResponseBody String deleteById(@PathVariable int id) {
+		boardRepository.deleteById(id);
+		return "ok"; // @ResponseBody 데이터 리턴!! String = text/plain
+	}
+
+	
 	
 	// 쿼리스트링, 패스var -> DB where에 걸리는 친구들
 	// 1.컨트롤러 설정 2. HTTP Method 선정 3. 받을 데이터가 있는지! (body, 쿼리스트링, 패스var)

@@ -21,6 +21,7 @@
 <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
   <style>
+
   #footer {
 	position:fixed;
 	left:0px;
@@ -40,7 +41,7 @@
 		<span class="navbar-toggler-icon"></span>
 	</button>
 	<div class="collapse navbar-collapse" id="collapsibleNavbar">
-		<ul class="navbar-nav">
+		<ul class="navbar-nav" >
 
 			<c:choose>
 				<c:when test="${empty sessionScope.principal}">
@@ -61,9 +62,6 @@
 					</li>
 				</c:otherwise>
 			</c:choose>
-
-
-
 
 		</ul>
 	</div>

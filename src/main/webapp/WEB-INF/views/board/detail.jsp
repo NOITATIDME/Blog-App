@@ -3,6 +3,8 @@
 <%@ include file="../layout/header.jsp"%>
 
 <div class="container">
+	  <!-- 내 글이면 (권한이 있으면) 수정과 삭제 버튼 보이게  if사용가능 -->
+
       <a href="#" class="btn btn-warning">수정</a>
 
 	  <button class="btn btn-danger" onclick="deleteById(${boardEntity.id})">삭제</button>
@@ -16,11 +18,18 @@
 				}); // 약속 - 어음 (10초)
 				
 				// 2.코드
-				let parseResponse = await response.text();
-				console.log(parseResponse);
+				// json() 함수는 json처럼 생긴 문자열을 자바스크립트 오브젝트로 변환해준다.
+				let parseResponse = await response.json();
+				console.log(parseResponse); 
 				
-				alert("삭제 성공");
-				location.href="/";
+ 				if(parseResponse.code == 1){
+					alert("삭제 성공");
+					location.href="/";
+				}else{
+					alert(parseResponse.msg);
+					location.href="/";
+				}
+				
 				// 3.코드
 			}
 			

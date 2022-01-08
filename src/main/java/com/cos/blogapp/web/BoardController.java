@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.cos.blogapp.domain.board.Board;
@@ -37,6 +39,36 @@ public class BoardController {
 	private final BoardRepository boardRepository;
 	private final HttpSession session;
 	
+	@PutMapping("/board/{id}")
+	public @ResponseBody CMRespDto<String> update(@PathVariable int id,  @RequestBody @Valid BoardSaveReqDto dto, BindingResult bindingResult) {
+
+		// 인증
+
+		// 권한
+
+		// 유효성 검사
+
+		User principal = (User) session.getAttribute("principal");
+
+		Board board = dto.toEntity(principal);
+		board.setId(id); // update의 핵심
+
+		boardRepository.save(board);
+
+		return new CMRespDto<>(1, "업데이트 성공", null);
+	}
+	
+	@GetMapping("/board/{id}/updateForm")
+	public String boardUpdateForm(@PathVariable int id, Model model) {
+		// 게시글 정보를 가지고 가야함.
+		Board boardEntity =  boardRepository.findById(id)
+				.orElseThrow(()-> new MyNotFoundException(id+"번호의 게시글을 찾을 수 없습니다."));
+
+		model.addAttribute("boardEntity", boardEntity);
+
+		return "board/updateForm";
+	}
+	
 	@DeleteMapping("/board/{id}")
 	public @ResponseBody CMRespDto<String> deleteById(@PathVariable int id) {
 
@@ -49,6 +81,7 @@ public class BoardController {
 		// 권한이 있는 사람만 함수 접근 가능(principal.id == {id})
 		Board boardEntity = boardRepository.findById(id)
 			.orElseThrow(()-> new MyAsyncNotFoundException("해당글을 찾을 수 없습니다."));
+		
 		if(principal.getId() != boardEntity.getUser().getId()) {
 			throw new MyAsyncNotFoundException("해당글을 삭제할 권한이 없습니다.");
 		}

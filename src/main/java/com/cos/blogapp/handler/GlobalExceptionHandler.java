@@ -12,13 +12,14 @@ import com.cos.blogapp.web.dto.CMRespDto;
 //@ControllerAdvice 이친구는 1. 익셉션 핸들링, 2. @Controller 의 역할까지 한다.
 @ControllerAdvice
 public class GlobalExceptionHandler {
+	// 일반요청
 	// RuntimeException 으로 처리 -> 모든 예외를 처리할 수 있는데 세분화 할 수 없다.
 	@ExceptionHandler(value = RuntimeException.class)
 	public @ResponseBody String error1(RuntimeException e) {
 		System.out.println("오류가 터졌습니다. : "+e.getMessage()); // No value present : db가 응답해줄 데이터가 없다.
 		return Script.href("/", e.getMessage());
 	}
-	
+	// fetch 요청 (데이터를 응답받아야할 때)
 	@ExceptionHandler(value = MyAsyncNotFoundException.class)
 	public @ResponseBody CMRespDto<String> error2(MyAsyncNotFoundException e) {
 		System.out.println("오류 터졌어 : "+e.getMessage());

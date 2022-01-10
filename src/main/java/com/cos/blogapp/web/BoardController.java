@@ -1,6 +1,7 @@
 package com.cos.blogapp.web;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import javax.servlet.http.HttpSession;
@@ -40,15 +41,33 @@ public class BoardController {
 	private final HttpSession session;
 	
 	@PutMapping("/board/{id}")
-	public @ResponseBody CMRespDto<String> update(@PathVariable int id,  @RequestBody @Valid BoardSaveReqDto dto, BindingResult bindingResult) {
-
-		// 인증
-
-		// 권한
+	public @ResponseBody CMRespDto<String> update(@PathVariable int id,  @RequestBody @Valid BoardSaveReqDto dto,
+			BindingResult bindingResult) {
 
 		// 유효성 검사
-
+		// 인증 체크(공통 로직)
+		if(bindingResult.hasErrors()) {
+			Map<String, String> errorMap = new HashMap<>();
+			for(FieldError error : bindingResult.getFieldErrors()) {
+				errorMap.put(error.getField(), error.getDefaultMessage());
+			}
+			throw new MyAsyncNotFoundException(errorMap.toString());
+		}
+		
+		// 인증
 		User principal = (User) session.getAttribute("principal");
+		if (principal == null) { // 로그인 안됨
+			throw new MyAsyncNotFoundException("인증이 되지 않았습니다");
+		}
+		
+		// 권한
+		Board boardEntity = boardRepository.findById(id)
+				.orElseThrow(()-> new MyAsyncNotFoundException("해당 게시글을 찾을 수 없습니다."));
+
+
+		if(principal.getId() != boardEntity.getUser().getId()) {
+			throw new MyAsyncNotFoundException("해당 게시글의 주인이 아닙니다.");
+		}
 
 		Board board = dto.toEntity(principal);
 		board.setId(id); // update의 핵심
@@ -120,7 +139,7 @@ public class BoardController {
 	public @ResponseBody String save(@Valid BoardSaveReqDto dto, BindingResult bindingResult) {
 		User principal = (User) session.getAttribute("principal");
 
-		// 인증, 권한 체크(공통 로직) 후 로그인 창으로 이동
+		// 인증 체크(공통 로직) 후 로그인 창으로 이동
 		if(principal == null) { // 로그인 안됨
 			return Script.href("/loginForm","잘못된 접근입니다.");
 		}

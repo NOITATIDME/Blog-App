@@ -20,7 +20,7 @@ public class CommentController {
 	private final CommentService commentService;
 	private final HttpSession session;
 
-	@DeleteMapping("/comment/{id}")
+	@DeleteMapping("/api/comment/{id}")
 	public @ResponseBody CMRespDto<?> deleteById(@PathVariable int id){
 
 		User principal = (User) session.getAttribute("principal");

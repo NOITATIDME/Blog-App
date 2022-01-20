@@ -45,7 +45,7 @@ public class BoardController {
 	private final CommentService commentService;
 	private final HttpSession session;
 	
-	@PostMapping("/board/{boardId}/comment")
+	@PostMapping("/api/board/{boardId}/comment")
 	public String commentSave(@PathVariable int boardId, CommentSaveReqDto dto) {
 
 		User principal = (User) session.getAttribute("principal");
@@ -59,7 +59,7 @@ public class BoardController {
 	}
 
 	
-	@PutMapping("/board/{id}")
+	@PutMapping("/api/board/{id}")
 	public @ResponseBody CMRespDto<String> update(@PathVariable int id,  @RequestBody @Valid BoardSaveReqDto dto,
 			BindingResult bindingResult) {
 
@@ -82,14 +82,14 @@ public class BoardController {
 		return new CMRespDto<>(1, "업데이트 성공", null);
 	}
 	
-	@GetMapping("/board/{id}/updateForm")
+	@GetMapping("/api/board/{id}/updateForm")
 	public String boardUpdateForm(@PathVariable int id, Model model) {
 		model.addAttribute("boardEntity", boardService.게시글수정페이지이동(id));
 
 		return "board/updateForm";
 	}
 	
-	@DeleteMapping("/board/{id}")
+	@DeleteMapping("/api/board/{id}")
 	public @ResponseBody CMRespDto<String> deleteById(@PathVariable int id) {
 
 		User principal = (User) session.getAttribute("principal");
@@ -115,7 +115,7 @@ public class BoardController {
 		return "board/detail"; // ViewResolver
 	   }
 	
-	@PostMapping("/board")
+	@PostMapping("/api/board")
 	public @ResponseBody String save(@Valid BoardSaveReqDto dto, BindingResult bindingResult) {
 		// 공통 로직 시작 -------------------------------------------
 

@@ -38,9 +38,11 @@
 	  </script>
 
       
-   <br /><br />
+   <br />
+   <br />
    <div>
-      글 번호 : ${boardEntity.id} </span> 작성자 : <span><i>${boardEntity.user.username}</i></span>
+      글 번호 : ${boardEntity.id} </span> 작성자 : <span><i>${boardEntity.user.username}
+      </i></span>
    </div>
    <br />
    <div>
@@ -67,15 +69,20 @@
    <br />
    
    <div class="card">
-      <div class="card-header"><b>댓글 리스트</b></div>
+      <div class="card-header">
+      		<b>댓글 리스트</b>
+      </div>
       <ul id="reply-box" class="list-group">
-         <li id="reply-1" class="list-group-item d-flex justify-content-between">
-            <div>댓글입니다</div>
-            <div class="d-flex">
-               <div class="font-italic">작성자 : 홍길동 &nbsp;</div>
-               <button class="badge">삭제</button>
-            </div>
-         </li>
+		<c:forEach var="comment" items="${boardEntity.comments}">
+			<li id="reply-${comment.id}"
+				class="list-group-item d-flex justify-content-between">
+				<div>${comment.content}</div>
+				<div class="d-flex">
+					<div class="font-italic">작성자 : ${comment.user.username} &nbsp;</div>
+					<button class="badge">삭제</button>
+				</div>
+			</li>
+		</c:forEach>
       </ul>
    </div>
    <br/>

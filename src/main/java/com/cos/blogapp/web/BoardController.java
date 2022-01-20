@@ -103,8 +103,9 @@ public class BoardController {
 	// 4. DB에 접근을 해야하면 Model 접근하기 or Else Model에 접근할 필요가 없다.
 	@GetMapping("/board/{id}")
 	public String detail(@PathVariable int id, Model model) {
+		// Board 객체에 존재하는 것 (Board(0), User(0), List<Comment>(x))
 		model.addAttribute("boardEntity", boardService.게시글상세보기(id));
-		return "board/detail";
+		return "board/detail"; // ViewResolver
 	   }
 	
 	@PostMapping("/board")

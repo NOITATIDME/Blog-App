@@ -50,10 +50,6 @@ public class BoardController {
 
 		User principal = (User) session.getAttribute("principal");
 
-		if (principal == null) {
-			throw new MyNotFoundException("인증이 되지 않았습니다");
-		}
-
 		commentService.댓글등록(boardId, dto, principal);
 		return "redirect:/board/" + boardId;
 	}
@@ -84,6 +80,7 @@ public class BoardController {
 	
 	@GetMapping("/api/board/{id}/updateForm")
 	public String boardUpdateForm(@PathVariable int id, Model model) {
+		System.out.println("id값은?????"+id);
 		model.addAttribute("boardEntity", boardService.게시글수정페이지이동(id));
 
 		return "board/updateForm";
@@ -93,9 +90,6 @@ public class BoardController {
 	public @ResponseBody CMRespDto<String> deleteById(@PathVariable int id) {
 
 		User principal = (User) session.getAttribute("principal");
-		if(principal == null) {
-			throw new MyAsyncNotFoundException("인증이 되지 않았습니다.");
-		}
 
 		boardService.게시글삭제(id, principal);
 
@@ -120,11 +114,6 @@ public class BoardController {
 		// 공통 로직 시작 -------------------------------------------
 
 		User principal = (User) session.getAttribute("principal");
-
-
-		if(principal == null) { 
-			return Script.href("/loginForm","잘못된 접근입니다.");
-		}
 		
 		if (bindingResult.hasErrors()) {
 			Map<String, String> errorMap = new HashMap<>();

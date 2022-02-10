@@ -6,7 +6,7 @@
 	  <!-- 내 글이면 (권한이 있으면) 수정과 삭제 버튼 보이게  if사용가능 -->
 
       <c:if test="${sessionScope.principal.id == boardEntity.user.id}">
-			<a href="/board/${boardEntity.id}/updateForm" class="btn btn-warning">수정</a>
+			<a href="/api/board/${boardEntity.id}/updateForm" class="btn btn-warning">수정</a>
 			<button class="btn btn-danger" onclick="deleteById(${boardEntity.id})">삭제</button>
 	  </c:if>
 
@@ -87,7 +87,8 @@
 				class="list-group-item d-flex justify-content-between">
 				<div>${comment.content}</div>
 				<div class="d-flex">
-						<div class="font-italic">작성자 : ${comment.user.username}&nbsp;</div>
+						<div class="font-italic">작성자 : ${comment.user.username}
+							&nbsp;</div>
 						<button class="badge" id="reply"  onClick="deleteById(${comment.id})">삭제</button>
 				</div>
 			</li>

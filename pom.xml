@@ -18,6 +18,12 @@
 	</properties>
 	<dependencies>
 		<!-- 추가 라이브러리 시작 -->
+		
+		<!-- 시큐리티 태그 라이브러리 -->
+		<dependency>
+		  <groupId>org.springframework.security</groupId>
+		  <artifactId>spring-security-taglibs</artifactId>
+		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.apache.tomcat/tomcat-jasper -->
 	    <dependency>
 	      <groupId>org.apache.tomcat</groupId>

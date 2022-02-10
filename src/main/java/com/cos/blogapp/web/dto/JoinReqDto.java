@@ -6,12 +6,14 @@ import javax.validation.constraints.Size;
 import com.cos.blogapp.domain.user.User;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
+@Builder
 public class JoinReqDto {
 	@Size(min = 2, max= 20)
 	@NotBlank

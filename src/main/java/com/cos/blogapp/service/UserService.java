@@ -22,7 +22,13 @@ public class UserService {
 	private final UserRepository userRepository;
 
 	// 이건 하나의 서비스(핵심로직)인가? (principal 값 변경, update치고, 세션값 변경(x))
-
+	
+	@Transactional(readOnly = true)
+	public User 회원찾기(String username) {
+		User user = userRepository.findByUsername(username).get();
+		return user;
+	}
+	
 	@Transactional(rollbackFor = MyAsyncNotFoundException.class)
 	public void 회원수정(User principal, UserUpdateDto dto) {
 		User userEntity = userRepository.findById(principal.getId())
@@ -39,6 +45,13 @@ public class UserService {
 		String encPassword = SHA.encrypt(dto.getPassword(), MyAlgorithm.SHA256);
 		dto.setPassword(encPassword);
 		userRepository.save(dto.toEntity());
+	}
+	
+	@Transactional
+	public void 카카오회원가입(User user) {
+		String encPassword = SHA.encrypt(user.getPassword(), MyAlgorithm.SHA256);
+		user.setPassword(encPassword);
+		userRepository.save(user);
 	}
 }
 
